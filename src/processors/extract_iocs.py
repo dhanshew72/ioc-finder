@@ -1,6 +1,12 @@
 import anthropic
 import base64
 
+from models.extraction_result import ExtractionResult
+from models.indicator_of_compromise import IndicatorOfCompromise
+from utils.markdown import strip_markdown_fences
+
+import json
+
 MODEL_NAME = "claude-sonnet-4-6"
 MAX_TOKENS = 16384
 EXTRACTION_PROMPT = """
@@ -62,7 +68,9 @@ class ExtractIOCs(object):
         with answer_stream as stream:
             for text in stream.text_stream:
                 raw_json += text
-        return raw_json
+        stripped_json = strip_markdown_fences(raw_json)
+        json_data = json.loads(stripped_json)
+        return self._parse(json_data)
 
     def _convert_pdf(self, pdf_bytes):
         return base64.standard_b64encode(pdf_bytes).decode()
@@ -85,3 +93,26 @@ class ExtractIOCs(object):
             }
         ]
         return messages
+
+    def _parse(self, data: dict) -> ExtractionResult:
+        ioc_data = data.get("iocs", [])
+        iocs = [
+            IndicatorOfCompromise(
+                domain=ioc["domain"],
+                ioc_type=ioc["ioc_type"],
+                threat_actor=ioc.get("threat_actor"),
+                malware_family=ioc.get("malware_family"),
+                usage=ioc["usage"],
+                confidence=ioc["confidence"],
+                context=ioc["context"],
+                source_section=ioc.get("source_section"),
+            )
+            for ioc in ioc_data
+        ]
+        return ExtractionResult(
+            report_title=data["report_title"],
+            report_date=data.get("report_date"),
+            threat_actors=data.get("threat_actors", []),
+            iocs=iocs,
+            total_domains_found=data["total_domains_found"],
+        )
