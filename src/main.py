@@ -18,9 +18,8 @@ def main(event: dict, context=None) -> None:
     url = event["url"]
     s3_client = S3Client(BUCKET)
     s3_path = _build_key(url)
-
-    existing = s3_client.list_objects(prefix=s3_path)
-    if existing:
+    has_been_processed = s3_client.list_objects(prefix=s3_path)
+    if has_been_processed:
         print(f"Already processed, skipping: {s3_path}")
         return
 
