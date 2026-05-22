@@ -1,0 +1,141 @@
+{
+  "report_title": "Domain Shadowing: A Stealthy Use of DNS Compromise for Cybercrime",
+  "report_date": "2022",
+  "threat_actors": [
+    "Unknown - phishing campaign operators"
+  ],
+  "iocs": [
+    {
+      "domain": "halont.edu.au",
+      "ioc_type": "domain",
+      "threat_actor": null,
+      "malware_family": null,
+      "usage": "phishing",
+      "confidence": "high",
+      "context": "Compromised parent domain under which attackers created malicious shadowed subdomains as part of a phishing campaign; domain owners later discovered the compromise.",
+      "source_section": "Table 1 / A Phishing Campaign Using Shadowed Domains"
+    },
+    {
+      "domain": "training.halont.edu.au",
+      "ioc_type": "subdomain",
+      "threat_actor": null,
+      "malware_family": null,
+      "usage": "phishing",
+      "confidence": "high",
+      "context": "Shadowed subdomain under compromised halont.edu.au with IP address in Russia (62.204.41.218), active for less than 1 month; attacker accidentally hijacked it via DNS wildcarding.",
+      "source_section": "Table 1"
+    },
+    {
+      "domain": "ocwdvmjjj78krus.halont.edu.au",
+      "ioc_type": "subdomain",
+      "threat_actor": null,
+      "malware_family": null,
+      "usage": "phishing",
+      "confidence": "high",
+      "context": "Malicious shadowed subdomain under compromised halont.edu.au with Russian IP address 62.204.41.218, active for less than 1 day.",
+      "source_section": "Table 1"
+    },
+    {
+      "domain": "baqrxmgfr39mfpp.halont.edu.au",
+      "ioc_type": "subdomain",
+      "threat_actor": null,
+      "malware_family": null,
+      "usage": "phishing",
+      "confidence": "high",
+      "context": "Malicious shadowed subdomain under compromised halont.edu.au with Russian IP address 62.204.41.218, active for less than 1 day.",
+      "source_section": "Table 1"
+    },
+    {
+      "domain": "barwonbluff.com.au",
+      "ioc_type": "domain",
+      "threat_actor": null,
+      "malware_family": null,
+      "usage": "phishing",
+      "confidence": "high",
+      "context": "Compromised parent domain (~19 years old) under which attackers created many malicious subdomains used in phishing links to harvest credentials.",
+      "source_section": "Table 1 / A Phishing Campaign Using Shadowed Domains"
+    },
+    {
+      "domain": "bancobpmmavfhxcc.barwonbluff.com.au",
+      "ioc_type": "subdomain",
+      "threat_actor": null,
+      "malware_family": null,
+      "usage": "phishing",
+      "confidence": "high",
+      "context": "Shadowed subdomain under compromised barwonbluff.com.au with Russian IP address 62.204.41.247, active for approximately 3 months as part of a phishing campaign.",
+      "source_section": "Executive Summary / Table 1"
+    },
+    {
+      "domain": "snaitechbumxzzwt.barwonbluff.com.au",
+      "ioc_type": "subdomain",
+      "threat_actor": null,
+      "malware_family": null,
+      "usage": "phishing",
+      "confidence": "high",
+      "context": "Shadowed subdomain used in phishing links redirecting victims to a fake Microsoft login page on elitepackagingblog.com to harvest credentials.",
+      "source_section": "A Phishing Campaign Using Shadowed Domains"
+    },
+    {
+      "domain": "tomsvprfudhd.barwonbluff.com.au",
+      "ioc_type": "subdomain",
+      "threat_actor": null,
+      "malware_family": null,
+      "usage": "phishing",
+      "confidence": "high",
+      "context": "Malicious shadowed subdomain under compromised barwonbluff.com.au with Russian IP address 62.204.41.77, active for less than 1 day.",
+      "source_section": "Table 1"
+    },
+    {
+      "domain": "brisbanegateway.com",
+      "ioc_type": "domain",
+      "threat_actor": null,
+      "malware_family": null,
+      "usage": "phishing",
+      "confidence": "high",
+      "context": "Compromised parent domain (~12 years old) under which attackers created malicious shadowed subdomains leveraging its benign reputation for phishing.",
+      "source_section": "Executive Summary / Table 1"
+    },
+    {
+      "domain": "carriernhoousvz.brisbanegateway.com",
+      "ioc_type": "subdomain",
+      "threat_actor": null,
+      "malware_family": null,
+      "usage": "phishing",
+      "confidence": "high",
+      "context": "Shadowed subdomain under compromised brisbanegateway.com with Russian IP address 62.204.41.218, active for approximately 2 days as part of a phishing campaign.",
+      "source_section": "Executive Summary / Table 1"
+    },
+    {
+      "domain": "vembanadhouse.com",
+      "ioc_type": "domain",
+      "threat_actor": null,
+      "malware_family": null,
+      "usage": "phishing",
+      "confidence": "high",
+      "context": "Compromised parent domain (~17 years old) under which attackers created malicious shadowed subdomains as part of the phishing campaign.",
+      "source_section": "Table 1"
+    },
+    {
+      "domain": "wiguhllnz43wxvq.vembanadhouse.com",
+      "ioc_type": "subdomain",
+      "threat_actor": null,
+      "malware_family": null,
+      "usage": "phishing",
+      "confidence": "high",
+      "context": "Malicious shadowed subdomain under compromised vembanadhouse.com with Russian IP address 62.204.41.218, active for less than 1 day.",
+      "source_section": "Table 1"
+    },
+    {
+      "domain": "login.elitepackagingblog.com",
+      "ioc_type": "subdomain",
+      "threat_actor": null,
+      "malware_family": null,
+      "usage": "phishing",
+      "confidence": "high",
+      "context": "Phishing landing page that harvests Microsoft user credentials; victims are redirected here from shadowed domains such as snaitechbumxzzwt.barwonbluff.com.au.",
+      "source_section": "A Phishing Campaign Using Shadowed Domains"
+    }
+  ],
+  "total_domains_found": 13,
+  "source_url": "https://unit42.paloaltonetworks.com/domain-shadowing/?pdf=download&lg=en&_wpnonce=2c5aefd0ad"
+}

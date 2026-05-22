@@ -1,0 +1,151 @@
+{
+  "report_title": "That AI Extension Helping You Write Emails? It's Reading Them First",
+  "report_date": "2026",
+  "threat_actors": [
+    "unknown"
+  ],
+  "iocs": [
+    {
+      "domain": "mcp-browser.qubecare.ai",
+      "ioc_type": "subdomain",
+      "threat_actor": null,
+      "malware_family": "Chrome MCP Server - AI Browser Control (RAT)",
+      "usage": "c2",
+      "confidence": "high",
+      "context": "The extension hardcodes a WebSocket connection to a remote C2 server at wss://mcp-browser.qubecare.ai/chrome, establishing persistent bidirectional communication for command dispatch.",
+      "source_section": "A RAT: MCP Server AI Automation Extension"
+    },
+    {
+      "domain": "api.gosupersonic.email",
+      "ioc_type": "subdomain",
+      "threat_actor": null,
+      "malware_family": "Supersonic AI (AitB)",
+      "usage": "exfiltration",
+      "confidence": "high",
+      "context": "A content script collects comprehensive email data including subject, sender, recipients, body and thread ID and POSTs it to api.gosupersonic.email/collect.",
+      "source_section": "Adversary in the Browser (AitB): Supersonic AI"
+    },
+    {
+      "domain": "gosupersonic.email",
+      "ioc_type": "domain",
+      "threat_actor": null,
+      "malware_family": "Supersonic AI (AitB)",
+      "usage": "exfiltration",
+      "confidence": "high",
+      "context": "Supersonic AI extension is associated with the domain gosupersonic.email used for data exfiltration of email content including OTPs.",
+      "source_section": "Indicators of Compromise"
+    },
+    {
+      "domain": "api.reverserecruiting.io",
+      "ioc_type": "subdomain",
+      "threat_actor": null,
+      "malware_family": "Reverse Recruiting - AI Job Application Assistant (Infostealer)",
+      "usage": "exfiltration",
+      "confidence": "high",
+      "context": "The extension's profile-sync.js script transmits the user's name, email, phone, LinkedIn URL, salary expectations, education and resume to api.reverserecruiting.io/v1/profile/sync.",
+      "source_section": "Infostealer: Reverse Recruiting \u2014 AI Job Application Assistant"
+    },
+    {
+      "domain": "chatgptforchrome.com",
+      "ioc_type": "domain",
+      "threat_actor": null,
+      "malware_family": "Chat AI for Chrome (Search Hijacker)",
+      "usage": "c2",
+      "confidence": "high",
+      "context": "All user searches are routed through chatgptforchrome.com and correlated with a persistent tracking ID, building a cross-device search history profile.",
+      "source_section": "Search Hijacker: Chat AI for Chrome"
+    },
+    {
+      "domain": "xuix.top",
+      "ioc_type": "domain",
+      "threat_actor": null,
+      "malware_family": "Adobe Express: AI Photo, Video (Brand Impersonator)",
+      "usage": "malware_distribution",
+      "confidence": "high",
+      "context": "The thanks.html file communicated with a URL hosted on xuix.top, which redirected to newextensioninstallweb.com/2025 to drive traffic to third-party browser installs.",
+      "source_section": "Brand Impersonator: AI Photo and Video Editor"
+    },
+    {
+      "domain": "newextensioninstallweb.com",
+      "ioc_type": "domain",
+      "threat_actor": null,
+      "malware_family": "Adobe Express: AI Photo, Video (Brand Impersonator)",
+      "usage": "malware_distribution",
+      "confidence": "high",
+      "context": "The thanks.html page redirected to newextensioninstallweb.com/2025, a page promoting installation of Opera GX browser as a third-party install campaign.",
+      "source_section": "Brand Impersonator: AI Photo and Video Editor"
+    },
+    {
+      "domain": "huiyiai.net",
+      "ioc_type": "domain",
+      "threat_actor": null,
+      "malware_family": "\u4f1a\u8bd1: AI AgentDeepLDeepSeek (Spyware)",
+      "usage": "c2",
+      "confidence": "high",
+      "context": "The extension manifest shows external connectivity to huiyiai.net and the extension requests broad permissions including proxy, webRequest and unlimitedStorage far exceeding translation needs.",
+      "source_section": "Spyware: AI AgentDeepLDeepSeek"
+    },
+    {
+      "domain": "yiban.io",
+      "ioc_type": "domain",
+      "threat_actor": null,
+      "malware_family": "\u4f1a\u8bd1: AI AgentDeepLDeepSeek (Spyware)",
+      "usage": "c2",
+      "confidence": "high",
+      "context": "The extension downloads a proxy auto-configuration (PAC) script from yiban.io/extension/proxy.pac?t=huiyi on startup to route user traffic through attacker-controlled proxy servers.",
+      "source_section": "Spyware: AI AgentDeepLDeepSeek"
+    },
+    {
+      "domain": "browser.cash",
+      "ioc_type": "domain",
+      "threat_actor": null,
+      "malware_family": "browser cash",
+      "usage": "unknown",
+      "confidence": "medium",
+      "context": "The extension named 'browser cash' with 30,000 users is listed as a high-risk extension masquerading as an AI application associated with domain browser.cash.",
+      "source_section": "Indicators of Compromise"
+    },
+    {
+      "domain": "banana.summarizer.one",
+      "ioc_type": "subdomain",
+      "threat_actor": null,
+      "malware_family": "Nano Banana",
+      "usage": "exfiltration",
+      "confidence": "medium",
+      "context": "The Nano Banana extension with 4,000 users is listed as a high-risk extension associated with the domain banana.summarizer.one/quota.",
+      "source_section": "Indicators of Compromise"
+    },
+    {
+      "domain": "notionapp.cn",
+      "ioc_type": "domain",
+      "threat_actor": null,
+      "malware_family": "Notion (malicious impersonator)",
+      "usage": "exfiltration",
+      "confidence": "medium",
+      "context": "A malicious extension impersonating Notion with 3,000 users is listed as a high-risk extension associated with the domain notionapp.cn.",
+      "source_section": "Indicators of Compromise"
+    },
+    {
+      "domain": "vomet.ru",
+      "ioc_type": "domain",
+      "threat_actor": null,
+      "malware_family": "Ask AI - GPT chat",
+      "usage": "unknown",
+      "confidence": "medium",
+      "context": "The extension named 'Ask AI - GPT chat' with 1,000 users is listed as a high-risk extension masquerading as an AI application associated with domain vomet.ru.",
+      "source_section": "Indicators of Compromise"
+    },
+    {
+      "domain": "pic-editor-chromeextension.uno",
+      "ioc_type": "domain",
+      "threat_actor": null,
+      "malware_family": "Picsart: AI Photo Video Editor (Brand Impersonator)",
+      "usage": "unknown",
+      "confidence": "medium",
+      "context": "The extension impersonating Picsart AI Photo Video Editor with 608 users is listed as a high-risk extension associated with the domain pic-editor-chromeextension.uno.",
+      "source_section": "Indicators of Compromise"
+    }
+  ],
+  "total_domains_found": 14,
+  "source_url": "https://unit42.paloaltonetworks.com/high-risk-gen-ai-browser-extensions/?pdf=download&lg=en&_wpnonce=2c5aefd0ad"
+}

@@ -1,10 +1,9 @@
 import anthropic
-import base64
-
 from models.extraction_result import ExtractionResult
 from models.indicator_of_compromise import IndicatorOfCompromise
 from utils.markdown import strip_markdown_fences
-
+from utils.url import read_url
+import base64
 import json
 
 MODEL_NAME = "claude-sonnet-4-6"
@@ -52,13 +51,15 @@ Return your response in this exact structure:
 }"""
 
 
-class ExtractIOCs(object):
+class ExtractIOCs:
 
-    def __init__(self, pdf_bytes):
+    def __init__(self, url: str) -> None:
+        pdf_bytes = read_url(url)
         self.client = anthropic.Anthropic()
+        self.url = url
         self.pdf_data = self._convert_pdf(pdf_bytes)
 
-    def extract_iocs(self):
+    def extract_iocs(self) -> ExtractionResult:
         raw_json = ""
         answer_stream = self.client.messages.stream(
             model=MODEL_NAME,
@@ -72,7 +73,8 @@ class ExtractIOCs(object):
         json_data = json.loads(stripped_json)
         return self._parse(json_data)
 
-    def _convert_pdf(self, pdf_bytes):
+    @staticmethod
+    def _convert_pdf(pdf_bytes):
         return base64.standard_b64encode(pdf_bytes).decode()
 
     def _build_messages(self):
@@ -115,4 +117,5 @@ class ExtractIOCs(object):
             threat_actors=data.get("threat_actors", []),
             iocs=iocs,
             total_domains_found=data["total_domains_found"],
+            source_url=self.url,
         )

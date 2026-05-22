@@ -6,6 +6,3 @@ dev-env: clean
 
 clean:
 	rm -rf .venv
-
-run:
-	$(ACTIVATE_VENV); python3 main.py
