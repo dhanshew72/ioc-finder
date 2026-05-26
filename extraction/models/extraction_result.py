@@ -1,4 +1,4 @@
-from extraction.src.models.indicator_of_compromise import IndicatorOfCompromise
+from extraction.models.indicator_of_compromise import IndicatorOfCompromise
 from dataclasses import dataclass
 from typing import Optional
 

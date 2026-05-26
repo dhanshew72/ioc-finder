@@ -1,6 +1,6 @@
-from extraction.src.utils.url import hash_url, read_url
-from extraction.src.processors.extract_iocs import ExtractIOCs
-from extraction.src.storage.s3 import S3Client
+from extraction.utils.url import hash_url, read_url
+from extraction.processors.extract_iocs import ExtractIOCs
+from extraction.storage.s3 import S3Client
 import dataclasses
 import datetime
 import json

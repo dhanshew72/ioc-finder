@@ -3,7 +3,7 @@ import json
 import unittest
 from pathlib import Path
 
-from extraction.src.processors.extract_iocs import ExtractIOCs
+from extraction.processors.extract_iocs import ExtractIOCs
 
 DATA_DIR = Path(__file__).parent / "data"
 OUTPUT_DIR = "output"
@@ -32,3 +32,5 @@ class TestFolderData(unittest.TestCase):
         with open(output_path, "w") as f:
             json.dump(dataclasses.asdict(result), f, indent=2)
         print(f"\nResults written to {output_path}")
+        self.assertIsNotNone(result.report_title)
+        self.assertEqual(result.total_domains_found, 14)
