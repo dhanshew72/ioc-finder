@@ -1,9 +1,9 @@
+from extraction.src.utils.url import hash_url, read_url
+from extraction.src.processors.extract_iocs import ExtractIOCs
+from extraction.src.storage.s3 import S3Client
 import dataclasses
 import datetime
 import json
-from utils.url import hash_url
-from processors.extract_iocs import ExtractIOCs
-from storage.s3 import S3Client
 
 BUCKET = "ioc-finder-data"
 
@@ -23,14 +23,8 @@ def main(event: dict, context=None) -> None:
         print(f"Already processed, skipping: {s3_path}")
         return
 
-    result = ExtractIOCs(url).extract_iocs()
+    pdf_bytes = read_url(url)
+    result = ExtractIOCs(pdf_bytes, url).extract_iocs()
     json_data = dataclasses.asdict(result)
     output_bytes = json.dumps(json_data).encode("utf-8")
     s3_client.put_object(s3_path, output_bytes)
-
-
-if __name__ == '__main__':
-    event = {
-        "url": "https://unit42.paloaltonetworks.com/domain-shadowing/?pdf=download&lg=en&_wpnonce=2c5aefd0ad"
-    }
-    main(event)

@@ -1,5 +1,5 @@
 import unittest
-from src.utils.markdown import strip_markdown_fences
+from extraction.src.utils.markdown import strip_markdown_fences
 
 
 class TestStripMarkdownFences(unittest.TestCase):

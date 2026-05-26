@@ -1,8 +1,7 @@
 import anthropic
-from models.extraction_result import ExtractionResult
-from models.indicator_of_compromise import IndicatorOfCompromise
-from utils.markdown import strip_markdown_fences
-from utils.url import read_url
+from extraction.src.models.extraction_result import ExtractionResult
+from extraction.src.models.indicator_of_compromise import IndicatorOfCompromise
+from extraction.src.utils.markdown import strip_markdown_fences
 import base64
 import json
 
@@ -53,11 +52,10 @@ Return your response in this exact structure:
 
 class ExtractIOCs:
 
-    def __init__(self, url: str) -> None:
-        pdf_bytes = read_url(url)
+    def __init__(self, pdf_bytes: bytes, source_url: str = "") -> None:
         self.client = anthropic.Anthropic()
-        self.url = url
-        self.pdf_data = self._convert_pdf(pdf_bytes)
+        self.url = source_url
+        self.pdf_data = self._convert_pdf_to_b64(pdf_bytes)
 
     def extract_iocs(self) -> ExtractionResult:
         raw_json = ""
@@ -74,7 +72,7 @@ class ExtractIOCs:
         return self._parse(json_data)
 
     @staticmethod
-    def _convert_pdf(pdf_bytes):
+    def _convert_pdf_to_b64(pdf_bytes):
         return base64.standard_b64encode(pdf_bytes).decode()
 
     def _build_messages(self):
