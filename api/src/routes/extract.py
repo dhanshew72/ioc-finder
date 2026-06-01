@@ -11,18 +11,17 @@ router = APIRouter(prefix='/extract')
 @router.post("/", response_model=ExtractResponse)
 def extract_data(request: Request, body: ExtractRequest):
     email = request.state.user["email"]
-    result = LambdaClient(LambdaFunction.IOC_EXTRACTION).invoke_get_response(
-        {"email": email, "url": str(body.url)}
-    )
+    payload = {"email": email, "url": body.url}
+    result = LambdaClient(LambdaFunction.IOC_EXTRACTION).invoke_get_response(payload)
     return ExtractResponse(**result)
 
 
 @router.get("/")
 def extract_list(request: Request):
     email = request.state.user["email"]
-    s3 = S3Client(S3Bucket.IOC_DATA)
+    s3_client = S3Client(S3Bucket.IOC_DATA)
     try:
-        return s3.get_json_object(f"processed/{email}/list.json")
+        return s3_client.get_json_object(f"processed/{email}/list.json")
     except ClientError as e:
         if e.response["Error"]["Code"] == "NoSuchKey":
             return []
