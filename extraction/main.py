@@ -1,30 +1,34 @@
+import dataclasses
+import json
 from extraction.utils.url import hash_url, read_url
 from extraction.processors.extract_iocs import ExtractIOCs
 from extraction.storage.s3 import S3Client
-import dataclasses
-import datetime
-import json
-
-BUCKET = "ioc-finder-data"
+from extraction.storage.resources import S3Bucket
+from extraction.models.extraction_list import ExtractionListEntry
 
 
-def _build_key(url: str, username: str) -> str:
-    url_hash = hash_url(url)
-    return f"processed/{username}/{url_hash}.json"
 
+def _update_entry(s3_client: S3Client, url: str, url_hash: str, email: str, report_title: str):
+    entry = ExtractionListEntry(url=url, report_title=report_title, name=url_hash).as_dict()
+    entries = s3_client.get_json_object(email)
+    entries.append(entry)
+    s3_path = f"processed/{email}/list.json"
+    s3_client.put_object(s3_path, entries)
 
-def main(event: dict, context=None) -> None:
+def main(event: dict, context=None) -> dict:
     url = event["url"]
-    username = event["username"]
-    s3_client = S3Client(BUCKET)
-    s3_path = _build_key(url, username)
+    email = event["email"]
+    s3_client = S3Client(S3Bucket.IOC_DATA)
+    url_hash = hash_url(url)
+    s3_path = f"processed/{email}/{url_hash}.json"
     has_been_processed = s3_client.list_objects(prefix=s3_path)
     if has_been_processed:
         print(f"Already processed, skipping: {s3_path}")
-        return
-
+        return {"error": "Already processed, skipping"}
     pdf_bytes = read_url(url)
     result = ExtractIOCs(pdf_bytes, url).extract_iocs()
     json_data = dataclasses.asdict(result)
     output_bytes = json.dumps(json_data).encode("utf-8")
     s3_client.put_object(s3_path, output_bytes)
+    _update_entry(s3_client, url, url_hash, email, result.report_title)
+    return json_data
