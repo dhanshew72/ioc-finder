@@ -3,7 +3,7 @@ import json
 import unittest
 from pathlib import Path
 
-from extraction.processors.extract_iocs import ExtractIOCs
+from processors.extract_iocs import ExtractIOCs
 
 DATA_DIR = Path(__file__).parent / "data"
 OUTPUT_DIR = "output"

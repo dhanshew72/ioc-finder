@@ -1,7 +1,7 @@
 import anthropic
-from extraction.models.extraction_result import ExtractionResult
-from extraction.models.indicator_of_compromise import IndicatorOfCompromise
-from extraction.utils.markdown import strip_markdown_fences
+from models.extraction_result import ExtractionResult
+from models.indicator_of_compromise import IndicatorOfCompromise
+from utils.markdown import strip_markdown_fences
 import base64
 import json
 

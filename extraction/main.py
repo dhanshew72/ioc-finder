@@ -1,10 +1,10 @@
 import dataclasses
 import json
-from extraction.utils.url import hash_url, read_url
-from extraction.processors.extract_iocs import ExtractIOCs
-from extraction.storage.s3 import S3Client
-from extraction.storage.resources import S3Bucket
-from extraction.models.extraction_list import ExtractionListEntry
+from utils.url import hash_url, read_url
+from processors.extract_iocs import ExtractIOCs
+from storage.s3 import S3Client
+from storage.resources import S3Bucket
+from models.extraction_list import ExtractionListEntry
 
 
 
