@@ -1,5 +1,6 @@
 boto3
-fastapi
+botocore
+fastapi[standard]
 uvicorn[standard]
 pydantic
 google-auth

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Request, HTTPException
 from botocore.exceptions import ClientError
-from models.extract import ExtractRequest, ExtractResponse
+from models.extract_request import ExtractRequest
+from models.extract_response import ExtractResponse
 from storage.lambda_client import LambdaClient
 from storage.s3_client import S3Client
 from storage.resources import LambdaFunction, S3Bucket
@@ -24,7 +25,6 @@ def extract_list(request: Request):
         return s3_client.get_json_object(f"processed/{email}/list.json")
     except ClientError as e:
         if e.response["Error"]["Code"] == "NoSuchKey":
-            print("Not found")
             return []
         raise
 
