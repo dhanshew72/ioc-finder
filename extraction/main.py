@@ -10,10 +10,13 @@ from models.extraction_list import ExtractionListEntry
 
 def _update_entry(s3_client: S3Client, url: str, url_hash: str, email: str, report_title: str):
     entry = ExtractionListEntry(url=url, report_title=report_title, name=url_hash)
-    entries = s3_client.get_json_object(email)
+    try:
+        entries = s3_client.get_json_object(email)
+    except:
+        entries = []
     entries.append(dataclasses.asdict(entry))
     s3_path = f"processed/{email}/list.json"
-    s3_client.put_object(s3_path, entries)
+    s3_client.put_object(s3_path, json.dumps(entries).encode("utf-8"))
 
 def main(event: dict, context=None) -> dict:
     url = event["url"]
