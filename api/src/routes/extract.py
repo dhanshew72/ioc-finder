@@ -24,6 +24,7 @@ def extract_list(request: Request):
         return s3_client.get_json_object(f"processed/{email}/list.json")
     except ClientError as e:
         if e.response["Error"]["Code"] == "NoSuchKey":
+            print("Not found")
             return []
         raise
 
