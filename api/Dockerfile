@@ -1,8 +1,9 @@
-FROM tiangolo/uvicorn-gunicorn-fastapi:python3.10-alpine3.8
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.10
 
-RUN apk update \
- && apk upgrade \
- && apk add --no-cache nginx
+RUN apt-get update \
+ && apt-get upgrade -y \
+ && apt-get install -y --no-install-recommends nginx \
+ && rm -rf /var/lib/apt/lists/*
 
 ENV PROJECT_DIR=api
 
