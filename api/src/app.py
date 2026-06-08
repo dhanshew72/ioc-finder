@@ -7,3 +7,7 @@ app = FastAPI()
 app.add_middleware(GoogleAuthMiddleware)
 
 app.include_router(extract_router)
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}

@@ -20,15 +20,11 @@ export class IocFinderStack extends cdk.Stack {
       this, 'GoogleClientIdSecret', 'TBD'
     );
 
-    // ── VPC ──────────────────────────────────────────────────────────────────
     const vpc = ec2.Vpc.fromLookup(this, 'Vpc', { isDefault: true });
 
-    // ── S3 ───────────────────────────────────────────────────────────────────
     const iocDataBucket = s3.Bucket.fromBucketName(this, 'IocDataBucket', 'ioc-finder-data');
     const deployBucket = s3.Bucket.fromBucketName(this, 'DeployBucket', 'ioc-deploy');
 
-    // ── Lambda: IOC Extraction ────────────────────────────────────────────────
-    // Code is pulled from the zip uploaded by `make deploy` in extraction/.
     const extractionFn = new lambda.Function(this, 'ExtractionFunction', {
       functionName: 'ioc-finder-extraction',
       runtime: lambda.Runtime.PYTHON_3_10,
@@ -42,20 +38,16 @@ export class IocFinderStack extends cdk.Stack {
     anthropicApiKeySecret.grantRead(extractionFn);
     googleClientIdSecret.grantRead(extractionFn);
 
-    // ── ECR: existing repository lookup ──────────────────────────────────────
     const apiRepo = ecr.Repository.fromRepositoryAttributes(this, 'ApiRepository', {
       repositoryArn: 'arn:aws:ecr:us-east-1:515504445954:repository/ioc-finder-app',
       repositoryName: 'ioc-finder-app',
     });
 
-    // ── ECS Cluster on EC2 ────────────────────────────────────────────────────
     const cluster = new ecs.Cluster(this, 'Cluster', {
       vpc,
       clusterName: 'ioc-finder',
     });
 
-    // t2.micro = 750 free hours/month for the first 12 months of free tier.
-    // maxCapacity: 1 ensures we never spin up a second (paid) instance.
     const asg = new autoscaling.AutoScalingGroup(this, 'EcsAsg', {
       vpc,
       instanceType: ec2.InstanceType.of(ec2.InstanceClass.T2, ec2.InstanceSize.MICRO),
@@ -90,7 +82,6 @@ export class IocFinderStack extends cdk.Stack {
       },
     });
 
-    // Health check — FastAPI's root or a /health endpoint
     apiService.targetGroup.configureHealthCheck({
       path: '/health',
       healthyHttpCodes: '200',
@@ -98,7 +89,6 @@ export class IocFinderStack extends cdk.Stack {
       unhealthyThresholdCount: 3,
     });
 
-    // ── Outputs ───────────────────────────────────────────────────────────────
     new cdk.CfnOutput(this, 'ApiUrl', {
       value: `http://${apiService.loadBalancer.loadBalancerDnsName}`,
       description: 'API service URL',
