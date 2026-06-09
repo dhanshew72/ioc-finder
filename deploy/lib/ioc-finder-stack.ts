@@ -14,13 +14,13 @@ export class IocFinderStack extends cdk.Stack {
     super(scope, id, props);
 
     const anthropicApiKeySecret = secretsmanager.Secret.fromSecretNameV2(
-      this, 'AnthropicApiKeySecret', 'TBD'
+      this, 'AnthropicApiKeySecret', 'ClaudeAPIKey'
     );
     const googleClientIdSecret = secretsmanager.Secret.fromSecretNameV2(
-      this, 'GoogleClientIdSecret', 'TBD'
+      this, 'GoogleClientIdSecret', 'GoogleClientID'
     );
 
-    const vpc = ec2.Vpc.fromLookup(this, 'Vpc', { isDefault: true });
+    const vpc = ec2.Vpc.fromLookup(this, 'Vpc', { vpcId: "vpc-0bc7cae8c296f4c58" });
 
     const iocDataBucket = s3.Bucket.fromBucketName(this, 'IocDataBucket', 'ioc-finder-data');
     const deployBucket = s3.Bucket.fromBucketName(this, 'DeployBucket', 'ioc-deploy');
@@ -56,7 +56,7 @@ export class IocFinderStack extends cdk.Stack {
       minCapacity: 1,
       maxCapacity: 1,
       vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
-      associatePublicIpAddress: true,
+      associatePublicIpAddress: false,
     });
 
     const capacityProvider = new ecs.AsgCapacityProvider(this, 'AsgCapacityProvider', {
@@ -66,18 +66,17 @@ export class IocFinderStack extends cdk.Stack {
     });
     cluster.addAsgCapacityProvider(capacityProvider);
 
-    // ── ECS Service + ALB ─────────────────────────────────────────────────────
-    // ALB is covered by free tier: 750 hours/month, first 12 months.
-    // memoryLimitMiB 512 leaves ~500 MB for the OS + ECS agent on a 1 GB host.
+
     const apiService = new ecsPatterns.ApplicationLoadBalancedEc2Service(this, 'ApiService', {
       cluster,
       desiredCount: 1,
-      publicLoadBalancer: true,
+      // TODO: Get frontend service and make that public with nginx facing service
+      publicLoadBalancer: false,
       listenerPort: 80,
       memoryLimitMiB: 512,
       cpu: 256,
       taskImageOptions: {
-        image: ecs.ContainerImage.fromEcrRepository(apiRepo, 'latest'),  // 515504445954.dkr.ecr.us-east-1.amazonaws.com/ioc-finder-app:latest
+        image: ecs.ContainerImage.fromEcrRepository(apiRepo, 'latest'), 
         containerPort: 80,
       },
     });
