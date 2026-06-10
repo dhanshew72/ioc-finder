@@ -48,22 +48,6 @@ export class IocFinderStack extends cdk.Stack {
       clusterName: 'ioc-finder',
     });
 
-    const internalSg = new ec2.SecurityGroup(this, 'InternalSecurityGroup', {
-      vpc,
-      description: 'Allow traffic from within the VPC only',
-      allowAllOutbound: false,
-    });
-    internalSg.addIngressRule(
-      ec2.Peer.ipv4(vpc.vpcCidrBlock),
-      ec2.Port.allTraffic(),
-      'Allow all inbound traffic from VPC CIDR'
-    );
-    internalSg.addEgressRule(
-      ec2.Peer.ipv4(vpc.vpcCidrBlock),
-      ec2.Port.allTraffic(),
-      'Allow all outbound traffic to VPC CIDR'
-    );
-
     const asg = new autoscaling.AutoScalingGroup(this, 'EcsAsg', {
       vpc,
       instanceType: ec2.InstanceType.of(ec2.InstanceClass.T2, ec2.InstanceSize.MICRO),
@@ -71,8 +55,7 @@ export class IocFinderStack extends cdk.Stack {
       desiredCapacity: 1,
       minCapacity: 1,
       maxCapacity: 1,
-      vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
-      securityGroup: internalSg,
+      vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS},
     });
 
     const capacityProvider = new ecs.AsgCapacityProvider(this, 'AsgCapacityProvider', {
@@ -87,6 +70,7 @@ export class IocFinderStack extends cdk.Stack {
       cluster,
       desiredCount: 1,
       listenerPort: 8001,
+      openListener: false,
       memoryLimitMiB: 512,
       cpu: 256,
       taskImageOptions: {
@@ -94,6 +78,11 @@ export class IocFinderStack extends cdk.Stack {
         containerPort: 8001,
       },
     });
+    apiService.loadBalancer.connections.allowFrom(
+      ec2.Peer.ipv4(vpc.vpcCidrBlock),
+      ec2.Port.tcp(8001),
+      'Allow port 8001 from VPC only'
+    );
 
     apiService.targetGroup.configureHealthCheck({
       path: '/health',
