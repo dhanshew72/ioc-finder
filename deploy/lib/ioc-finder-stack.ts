@@ -98,6 +98,7 @@ export class IocFinderStack extends cdk.Stack {
     });
 
     extractionFn.grantInvoke(apiService.taskDefinition.taskRole);
+    googleClientIdSecret.grantRead(apiService.taskDefinition.taskRole);
   }
 
   private createExtractionLambda(): cdk.aws_lambda.Function {
