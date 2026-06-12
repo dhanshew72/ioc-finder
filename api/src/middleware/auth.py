@@ -1,11 +1,12 @@
-import os
+import boto3
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
-GOOGLE_CLIENT_ID = os.environ["GOOGLE_CLIENT_ID"]
+_sm = boto3.client("secretsmanager")
+GOOGLE_CLIENT_ID = _sm.get_secret_value(SecretId="GoogleClientID")["SecretString"]
 
 _google_request = google_requests.Request()
 

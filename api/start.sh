@@ -1,4 +1,4 @@
 #!/bin/sh
 
-nginx -g "pid $(pwd)/nginx.pid;"
+nginx
 gunicorn -c gunicorn_conf.py app:app
