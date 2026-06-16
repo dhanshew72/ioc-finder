@@ -77,8 +77,8 @@ export class IocFinderStack extends cdk.Stack {
       desiredCount: 1,
       listenerPort: 8001,
       openListener: false,
-      memoryLimitMiB: 1024,
-      cpu: 512,
+      memoryLimitMiB: 256,
+      cpu: 256,
       taskImageOptions: {
         image: ecs.ContainerImage.fromEcrRepository(apiRepo, 'latest'),
         containerPort: 8001,
